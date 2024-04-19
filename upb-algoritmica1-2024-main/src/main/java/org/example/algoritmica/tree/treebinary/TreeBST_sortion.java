@@ -49,44 +49,92 @@ public class TreeBST_sortion implements TBPrint {
 
     //Inserción de elementos en un árbol binario de búsqueda
 
-    public void addAll(int ...values){ //Para enviar mas de un valor
-        for (value:
-             values) {
+    public void addAll(int ...values) {
+        for (int value : values) {
             add(value);
-
         }
-
     }
     public void add(int value) {
-        //TreeBST_sortion tb = new TreeBST_sortion();
-
-
-        Node node = new Node(value);
         if (isEmpty()) {
             root = new Node(value);
             size = 1;
             return;
         }
-
-
-        System.out.println("Este es el valor que tengo ahorita: " + node.getValue());
-
-        while(node != null){
-            if (node.getLeft() == null) {
-                node.setLeft(new Node(value));
-                size++;
-            } else {
-                node.setRight(new Node(value));
-                size++;
-                return;
+        // implement
+        Node node = root;
+        while (node != null) {
+            if (value > node.getValue()) { // voy por la derecha
+                if (node.getRight() == null) {
+                    node.setRight(new Node(value));
+                    size++;
+                    return;
+                }
+                node = node.getRight();
+            } else { // voy por la izq
+                if (node.getLeft() == null) {
+                    node.setLeft(new Node(value));
+                    size++;
+                    return;
+                }
+                node = node.getLeft();
             }
         }
-
-
-
-        //TBPrintUtil.print(tb);
-
     }
+    /**
+     * Elimina el nodo correspondiente al value del arbol bst
+     * Considerar que hay 3 escenarios:
+     *   1. si el nodo a eliminar es hoja
+     *   2. si el nodo a eliminar tiene un solo hijo
+     *   3. si el nodo a eliminar tiene dos hijos
+     * @param value
+     */
+    public void delete(int value) {
+        root = deleteMask(root, value);
+    }
+
+    private Node deleteMask(Node node, int value) {
+        if (node == null)
+            return node;
+
+        if (value < node.getValue()) {
+            node.setLeft(deleteMask(node.getLeft(), value));
+
+        } else if (value > node.getValue()) {
+            node.setRight(deleteMask(node.getRight(), value));
+
+        } else {
+            if (node.isLeaf()) {
+                return null;
+            }
+
+            if (node.hasOneSon()) {
+                return node.getLeft() != null ? node.getLeft() : node.getRight();
+            }
+
+            if (node.hasTwoSon()) { //Usar nextInOrden
+                Node child = node.getRight();
+                Node childPadre = node;
+
+
+                while (child.getLeft() != null) {
+                    childPadre = child;
+                    child = child.getLeft();
+                }
+
+                //intercambiando
+                if (childPadre != node) {
+                    childPadre.setLeft(child.getRight());
+                } else {
+                    childPadre.setRight(child.getRight());
+                }
+
+                //reemplazando
+                node.setValue(child.getValue());
+            }
+        }
+        return node;
+    }
+
 
 
 
@@ -167,7 +215,7 @@ public class TreeBST_sortion implements TBPrint {
 //        tb.putLeft(20, 28);
         //tb.print();
 
-        //TODO revisar 
+        //TODO revisar
 
         //TBPrintUtil.print(tb);
         //System.out.println(tb.depth(tb.root));
@@ -190,6 +238,27 @@ public class TreeBST_sortion implements TBPrint {
         tb.add(32);
         tb.add(5);
 
+
+        System.out.println("Arbol original");
+        TBPrintUtil.print(tb);
+
+
+        System.out.println("Cuando tiene un hijo - Eliminando el 10");
+        tb.delete(10);
+        TBPrintUtil.print(tb);
+        //Caso 2 el eliminar tiene un solo hijo
+
+
+
+        //Caso 3 eliminar cuando tiene dos hijos
+        System.out.println("Elimina cuando tiene dos hijos - Eliminando el 15");
+        tb.delete(15);
+        TBPrintUtil.print(tb);
+
+
+        //Caso 1 eliminar si es hoja
+        System.out.println("Eliminar cuando es hoja - Eliminando el 5");
+        tb.delete(5);
         TBPrintUtil.print(tb);
 
     }
