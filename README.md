@@ -1,7 +1,7 @@
 Integrantes 
   - Adrian Ovando
   - Nicolas Crespo
-  - Omar Justiniano
+  - Omar Justiniano Mi enemigo mas grande
   - Miguel Angel Achá Boi Ano
 
 
